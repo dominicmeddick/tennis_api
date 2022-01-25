@@ -1,0 +1,135 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/APITechTest.csproj": {}
+  },
+  "projects": {
+    "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/APITechTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/APITechTest.csproj",
+        "projectName": "APITechTest",
+        "projectPath": "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/APITechTest.csproj",
+        "packagesPath": "/Users/dominicmeddick/.nuget/packages/",
+        "outputPath": "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/dominicmeddick/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/Repository.csproj": {
+                "projectPath": "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/Repository.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/Repository.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/Repository.csproj",
+        "projectName": "Repository",
+        "projectPath": "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/Repository.csproj",
+        "packagesPath": "/Users/dominicmeddick/.nuget/packages/",
+        "outputPath": "/Users/dominicmeddick/Documents/Projects/tennis-api/Repository/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/dominicmeddick/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

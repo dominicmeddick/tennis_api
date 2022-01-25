@@ -1,0 +1,19 @@
+{
+  "FilePath": "/Users/dominicmeddick/Documents/Projects/tennis-api/APITechTest/APITechTest.csproj",
+  "Configuration": {
+    "ConfigurationName": "MVC-3.0",
+    "LanguageVersion": "5.0",
+    "Extensions": [
+      {
+        "ExtensionName": "MVC-3.0"
+      }
+    ]
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 900
+  },
+  "RootNamespace": "APITechTest",
+  "Documents": [],
+  "SerializationFormat": "0.2"
+}
