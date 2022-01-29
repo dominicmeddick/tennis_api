@@ -22,6 +22,7 @@ namespace Repository
             optionsBuilder.UseSqlServer(configuration["ConnectionString"]);
         }
 
+        // Pre-populate db with nationalities and players
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var serbianNationality = new Nationality(id: 1, name: "Serbia");
