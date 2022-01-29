@@ -1,5 +1,7 @@
-APITechTest/bin
-APITechTest/obj
-Repository/bin
-Repository/obj
+APITechTest/bin/
+APITechTest/obj/
+Repository/bin/
+Repository/obj/
+Tests/bin
+Tests/obj/
 .vs/
