@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.AspNetCore.Mvc;
 
 using Repository;
@@ -26,30 +29,46 @@ namespace APITechTest
         {
             IQueryable<Player> players = _context.Players;
 
-            if (query.NationalityName != null)
+            if (query.Nationality != null)
             {
-                // Todo: Sanitize input
-                string name = query.NationalityName.ToLower();
+                // Todo: Sanitize input?
+                var name = query.Nationality.ToLower();
 
-                IQueryable<Nationality> nationsResult =
-                    _context.Nationalities.Where(n => n.Name.Equals(name));
+                // Todo: More performant to store all nationality names as
+                // lowercase, if there's time to write method to convert
+                // lowercase back to correctly capitalized.
 
-                if (nationsResult.Count() == 0)
+                var nationsQuery =
+                    _context.Nationalities
+                        .Where(n => n.Name.ToLower().Equals(name))
+                        .Include(n => n.Players);
+
+                if (nationsQuery.Count() == 0)
                 {
                     return NotFound();
                 }
 
-                Nationality nationality = nationsResult.First();
-                players = players.Where(p => p.Nationality.Id == nationality.Id);
+                players = nationsQuery.First().Players.AsQueryable();
             }
 
-            if (query.RankName != null)
-            {
-                // Todo
-            }
+            //if (query.Rank != null)
+            //{
+            //    // Todo: Sanitize input?
+            //    string name = query.Rank.ToLower();
+            //    IQueryable<Rank> ranksQuery =
+            //        _context.Ranks.Where(n => n.Name.ToLower().Equals(name));
+
+            //    if (ranksQuery.Count() == 0)
+            //    {
+            //        return NotFound();
+            //    }
+
+            //    Rank rank = ranksQuery.First();
+            //    players = players.Where(p => p.Points >= rank.MinPoints && p.Points <= rank.MaxPoints);
+            //}
 
             players = players.OrderByDescending(p => p.Points);
-            return Ok(PlayerView.GetViews(players));
+            return Ok(PlayerView.GetViews(players, _context.Nationalities.ToArray()));
         }
 
         [HttpGet("{id}")]

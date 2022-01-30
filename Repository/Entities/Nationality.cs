@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Repository.Entities
 {
@@ -8,10 +9,12 @@ namespace Repository.Entities
 
         public string Name { get; private set; }
 
+        public ICollection<Player> Players { get; set; }
+
         public Nationality(int id, string name)
         {
             Id = id;
-            Name = name.ToLower();
+            Name = name;
         }
     }
 }

@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Repository.Entities
 {
     public class Player
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
-        public int NationalityId { get; private set; }
+        public int NationalityId { get; set; }
 
-        public Nationality Nationality { get; private set; }
+        public Nationality Nationality { get; set; }
 
-        public DateTime BirthDate { get; private set; }
+        public DateTime BirthDate { get; set; }
 
-        public int Points { get; private set; }
+        public int Points { get; set; }
 
-        public int Games { get; private set; }
+        public int Games { get; set; }
 
         public Player
         (

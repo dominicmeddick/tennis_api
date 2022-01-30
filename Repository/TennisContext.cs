@@ -25,26 +25,7 @@ namespace Repository
         // Pre-populate db with nationalities and players
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var unrankedRank = new Rank(1, "Unranked", int.MinValue, -1);
-            var bronzeRank = new Rank(2, "Bronze", 0, 2999);
-            var silverRank = new Rank(3, "Silver", 3000, 4999);
-            var goldRank = new Rank(4, "Gold", 5000, 9999);
-            var legendRank = new Rank(5, "Supersonic Legend", 10000, int.MaxValue);
-
-            modelBuilder.Entity<Rank>(entity =>
-            {
-                entity.ToTable("Ranks", "dbo");
-
-                entity.HasData(
-                    bronzeRank,
-                    silverRank,
-                    goldRank,
-                    legendRank
-                );
-            });
-
-
-            var serbianNationality = new Nationality(id: 1, name: "Serbia");
+            var serbianNationality = new Nationality(id: 1, name: "Korean");
             var russianNationality = new Nationality(id: 2, name: "Russia");
             var germanNationality = new Nationality(id: 3, name: "Germany");
             var greekNationality = new Nationality(id: 4, name: "Greece");
@@ -70,7 +51,9 @@ namespace Repository
             {
                 entity.ToTable("Players", "dbo");
 
-                entity.HasOne(player => player.Nationality).WithMany();
+                entity
+                    .HasOne(player => player.Nationality)
+                    .WithMany(x => x.Players);
 
                 entity.HasData(
                     new Player
