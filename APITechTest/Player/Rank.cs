@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
 namespace APITechTest
 {
     public class Rank
     {
-        private static readonly Rank[] Ranks = new Rank[]
+        private static readonly Rank[] _ranks = new Rank[]
         {
             new Rank("Unranked", int.MinValue, -1),
             new Rank("Bronze", 0, 2999),
@@ -12,10 +15,23 @@ namespace APITechTest
             new Rank("Supersonic Legend", 10000, int.MaxValue)
         };
 
-        private int _minPoints;
-        private int _maxPoints;
+        private static readonly Dictionary<string, Rank> _ranksByName =
+            new Dictionary<string, Rank>
+            {
+                { _ranks[0].Name, _ranks[0] },
+                { _ranks[1].Name, _ranks[1] },
+                { _ranks[2].Name, _ranks[2] },
+                { _ranks[3].Name, _ranks[3] },
+                { _ranks[4].Name, _ranks[4] },
+            };
 
-        public string Name { get; private set; }
+        public static readonly ReadOnlyDictionary<string, Rank> RanksByName =
+            new ReadOnlyDictionary<string, Rank>(_ranksByName);
+
+        public int MinPoints { get; }
+        public int MaxPoints { get; }
+
+        public string Name { get; }
 
         public Rank(string name, int minPoints, int maxPoints)
         {
@@ -30,15 +46,15 @@ namespace APITechTest
             }
 
             Name = name;
-            _minPoints = minPoints;
-            _maxPoints = maxPoints;
+            MinPoints = minPoints;
+            MaxPoints = maxPoints;
         }
 
         public static Rank GetRank(int points)
         {
-            foreach (Rank rank in Ranks)
+            foreach (Rank rank in _ranks)
             {
-                if (points <= rank._maxPoints)
+                if (points <= rank.MaxPoints)
                 {
                     return rank;
                 }

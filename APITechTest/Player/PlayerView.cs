@@ -15,25 +15,26 @@ namespace APITechTest
         public string Rank { get; }
         public int Points { get; }
 
-        public PlayerView(Player player, int position)
+        public PlayerView(Player player)
         {
-            Position = position;
+            // Todo
+            // Position = position;
+
             FirstName = player.FirstName;
             LastName = player.LastName;
             Age = Player.CalculcateAge(player.BirthDate);
+            Nationality = player.Nationality.Name;
             Rank = APITechTest.Rank.GetRank(player.Points).Name;
             Points = player.Points;
         }
 
-        public static List<PlayerView> GetViews(IEnumerable<Player> players, Nationality[] nationalities)
+        public static List<PlayerView> GetViews(IEnumerable<Player> players)
         {
             List<PlayerView> views = new List<PlayerView>();
 
-            int pos = 1;
             foreach (Player player in players)
             {
-                PlayerView view = new PlayerView(player, pos++);
-
+                PlayerView view = new PlayerView(player);
                 views.Add(view);
             }
 
