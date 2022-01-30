@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+
+using APITechTest.QueryParameters;
 using Repository;
 using Repository.Entities;
 
@@ -21,16 +23,46 @@ namespace APITechTest.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Player> GetAllPlayers()
+        public IActionResult GetAllPlayers([FromQuery] PlayersQueryParameters query)
         {
-            return _context.Players.ToArray();
+            IQueryable<Player> players = _context.Players;
+
+            if (query.NationalityName != null)
+            {
+                // Todo: Sanitize input
+                string name = query.NationalityName.ToLower();
+
+                IQueryable<Nationality> nationsResult =
+                    _context.Nationalities.Where(n => n.Name.Equals(name));
+
+                if (nationsResult.Count() == 0)
+                {
+                    return NotFound();
+                }
+
+                Nationality nationality = nationsResult.First();
+                players = players.Where(p => p.Nationality.Id == nationality.Id);
+            }
+
+            if (query.RankName != null)
+            {
+                // Todo
+            }
+
+            return Ok(players.ToArray());
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetPlayer(int id)
         {
-            return "value";
+            var player = _context.Players.Find(id);
+
+            if (player != null)
+            {
+                return Ok(player);
+            }
+
+            return NotFound();
         }
 
         // POST api/values

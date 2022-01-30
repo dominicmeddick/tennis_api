@@ -11,7 +11,7 @@ namespace Repository.Entities
         public Nationality(int id, string name)
         {
             Id = id;
-            Name = name;
+            Name = name.ToLower();
         }
     }
 }
