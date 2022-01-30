@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Repository.Entities
 {
@@ -89,7 +90,7 @@ namespace Repository.Entities
         }
 
         // Todo: account for leap years
-        private int CalculcateAge(DateTime birthDate)
+        public static int CalculcateAge(DateTime birthDate)
         {
             TimeSpan diff = DateTime.Today - birthDate;
             return diff.Days / 365;

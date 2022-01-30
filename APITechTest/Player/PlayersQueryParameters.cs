@@ -1,5 +1,4 @@
-﻿using System;
-namespace APITechTest.QueryParameters
+﻿namespace APITechTest
 {
     public class PlayersQueryParameters
     {

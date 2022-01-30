@@ -4,13 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using APITechTest.QueryParameters;
 using Repository;
 using Repository.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace APITechTest.Controllers
+namespace APITechTest
 {
     [Route("api/players")]
     public class PlayersController : Controller
@@ -23,7 +22,7 @@ namespace APITechTest.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllPlayers([FromQuery] PlayersQueryParameters query)
+        public IActionResult GetPlayers([FromQuery] PlayersQueryParameters query)
         {
             IQueryable<Player> players = _context.Players;
 
@@ -49,7 +48,8 @@ namespace APITechTest.Controllers
                 // Todo
             }
 
-            return Ok(players.ToArray());
+            players = players.OrderByDescending(p => p.Points);
+            return Ok(PlayerView.GetViews(players));
         }
 
         [HttpGet("{id}")]

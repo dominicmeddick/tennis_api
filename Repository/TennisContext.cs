@@ -25,9 +25,28 @@ namespace Repository
         // Pre-populate db with nationalities and players
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var unrankedRank = new Rank(1, "Unranked", int.MinValue, -1);
+            var bronzeRank = new Rank(2, "Bronze", 0, 2999);
+            var silverRank = new Rank(3, "Silver", 3000, 4999);
+            var goldRank = new Rank(4, "Gold", 5000, 9999);
+            var legendRank = new Rank(5, "Supersonic Legend", 10000, int.MaxValue);
+
+            modelBuilder.Entity<Rank>(entity =>
+            {
+                entity.ToTable("Ranks", "dbo");
+
+                entity.HasData(
+                    bronzeRank,
+                    silverRank,
+                    goldRank,
+                    legendRank
+                );
+            });
+
+
             var serbianNationality = new Nationality(id: 1, name: "Serbia");
             var russianNationality = new Nationality(id: 2, name: "Russia");
-            var germannNtionality = new Nationality(id: 3, name: "Germany");
+            var germanNationality = new Nationality(id: 3, name: "Germany");
             var greekNationality = new Nationality(id: 4, name: "Greece");
             var spanishNationality = new Nationality(id: 5, name: "Spain");
             var polishNationality = new Nationality(id: 6, name: "Poland");
@@ -36,21 +55,22 @@ namespace Repository
             {
                 entity.ToTable("Nationalities", "dbo");
 
-                entity.HasData(
-                    new Nationality( id: 1, name: "Serbia"),
-                    new Nationality(id: 2, name: "Russia"),
-                    new Nationality(id: 3, name: "Germany"),
-                    new Nationality(id: 4, name: "Greece"),
-                    new Nationality(id: 5, name: "Spain"),
-                    new Nationality(id: 6, name: "Poland")
-                    );
+                entity.HasData
+                (
+                    serbianNationality,
+                    russianNationality,
+                    germanNationality,
+                    greekNationality,
+                    spanishNationality,
+                    polishNationality
+                );
             });
 
             modelBuilder.Entity<Player>(entity =>
             {
                 entity.ToTable("Players", "dbo");
 
-                entity.HasOne(player=> player.Nationality).WithMany();
+                entity.HasOne(player => player.Nationality).WithMany();
 
                 entity.HasData(
                     new Player
@@ -58,7 +78,7 @@ namespace Repository
                         id: 1,
                         firstName: "Rafael",
                         lastName: "Nadal",
-                        nationalityId: 5,
+                        nationalityId: spanishNationality.Id,
                         birthDate: DateTime.Parse("1986-06-03"),
                         points: 4875,
                         games: 1240
@@ -68,7 +88,7 @@ namespace Repository
                         id: 2,
                         firstName: "Novak",
                         lastName: "Djokovic",
-                        nationalityId: 1,
+                        nationalityId: serbianNationality.Id,
                         birthDate: DateTime.Parse("1987-05-22"),
                         points: 11015,
                         games: 1188
@@ -78,7 +98,7 @@ namespace Repository
                         id: 3,
                         firstName: "Roberto Bautista",
                         lastName: "Agut",
-                        nationalityId: 5,
+                        nationalityId: spanishNationality.Id,
                         birthDate: DateTime.Parse("1988-04-14"),
                         points: 2385,
                         games: 546
@@ -88,7 +108,7 @@ namespace Repository
                         id: 4,
                         firstName: "Jan-Lennard",
                         lastName: "Struff",
-                        nationalityId: 3,
+                        nationalityId: germanNationality.Id,
                         birthDate: DateTime.Parse("1990-04-25"),
                         points: 1149,
                         games: 359
@@ -98,7 +118,7 @@ namespace Repository
                         id: 5,
                         firstName: "Dusan",
                         lastName: "Lajovic",
-                        nationalityId: 1,
+                        nationalityId: serbianNationality.Id,
                         birthDate: DateTime.Parse("1990-06-30"),
                         points: 1346,
                         games: 351
@@ -108,7 +128,7 @@ namespace Repository
                         id: 6,
                         firstName: "Pablo Carreno",
                         lastName: "Busta",
-                        nationalityId: 5,
+                        nationalityId: spanishNationality.Id,
                         birthDate: DateTime.Parse("1991-07-12"),
                         points: 2305,
                         games: 419
@@ -118,7 +138,7 @@ namespace Repository
                         id: 7,
                         firstName: "Filip",
                         lastName: "Krajinovic",
-                        nationalityId: 1,
+                        nationalityId: serbianNationality.Id,
                         birthDate: DateTime.Parse("1992-02-27"),
                         points: 1427,
                         games: 206
@@ -128,7 +148,7 @@ namespace Repository
                         id: 8,
                         firstName: "Asla",
                         lastName: "Karatsev",
-                        nationalityId: 2,
+                        nationalityId: russianNationality.Id,
                         birthDate: DateTime.Parse("1993-09-04"),
                         points: 2553,
                         games: 71
@@ -138,7 +158,7 @@ namespace Repository
                         id: 9,
                         firstName: "Dominik",
                         lastName: "Koepfer",
-                        nationalityId: 3,
+                        nationalityId: germanNationality.Id,
                         birthDate: DateTime.Parse("1994-04-29"),
                         points: 1096,
                         games: 74
@@ -148,7 +168,7 @@ namespace Repository
                         id: 10,
                         firstName: "Daniil",
                         lastName: "Medvedev",
-                        nationalityId: 2,
+                        nationalityId: russianNationality.Id,
                         birthDate: DateTime.Parse("1996-02-11"),
                         points: 8935,
                         games: 325
@@ -158,7 +178,7 @@ namespace Repository
                         id: 11,
                         firstName: "Hubert",
                         lastName: "Hurkacz",
-                        nationalityId: 6,
+                        nationalityId: polishNationality.Id,
                         birthDate: DateTime.Parse("1997-02-11"),
                         points: 3336,
                         games: 166
@@ -168,7 +188,7 @@ namespace Repository
                         id: 12,
                         firstName: "Alexander",
                         lastName: "Zverev",
-                        nationalityId: 3,
+                        nationalityId: germanNationality.Id,
                         birthDate: DateTime.Parse("1997-04-20"),
                         points: 7970,
                         games: 453
@@ -178,7 +198,7 @@ namespace Repository
                         id: 13,
                         firstName: "Andrey",
                         lastName: "Rublev",
-                        nationalityId: 2,
+                        nationalityId: russianNationality.Id,
                         birthDate: DateTime.Parse("1997-10-20"),
                         points: 4785,
                         games: 297
@@ -188,7 +208,7 @@ namespace Repository
                         id: 14,
                         firstName: "Stefanos",
                         lastName: "Tsitsipas",
-                        nationalityId: 4,
+                        nationalityId: greekNationality.Id,
                         birthDate: DateTime.Parse("1998-08-12"),
                         points: 6540,
                         games: 285
