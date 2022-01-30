@@ -11,7 +11,7 @@ namespace APITechTest
         public string Birthdate { get; set; }
 
         // Optional
-        public int Points { get; set; }
-        public int Games { get; set; }
+        public int? Points { get; set; }
+        public int? Games { get; set; }
     }
 }

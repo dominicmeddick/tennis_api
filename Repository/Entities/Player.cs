@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Repository.Entities
 {
@@ -30,11 +29,9 @@ namespace Repository.Entities
             DateTime birthDate,
             int points,
             int games
-        ): this(firstName, lastName, nationalityId, birthDate)
+        ): this(firstName, lastName, nationalityId, birthDate, points, games)
         {
             Id = id;
-            Points = points;
-            Games = games;
         }
 
         public Player
@@ -42,18 +39,9 @@ namespace Repository.Entities
             string firstName,
             string lastName,
             int nationalityId,
-            string birthDate
-        ): this(firstName, lastName, nationalityId, ParseBirthday(birthDate))
-        {
-
-        }
-
-        public Player
-        (
-            string firstName,
-            string lastName,
-            int nationalityId,
-            DateTime birthDate
+            DateTime birthDate,
+            int points,
+            int games
         )
         {
             if (string.IsNullOrWhiteSpace(firstName))
@@ -92,7 +80,8 @@ namespace Repository.Entities
 
             // Default value. Gets overriden if constructor with points param
             // is used.
-            Points = 1200;
+            Points = points;
+            Games = games;
         }
 
         private bool IsDuplicateName(string firstName, string lastName)
@@ -105,11 +94,6 @@ namespace Repository.Entities
         {
             var diff = DateTime.Today - birthDate;
             return diff.Days / 365;
-        }
-
-        public static DateTime ParseBirthday(string dateString)
-        {
-            return DateTime.ParseExact(dateString, "yyyyMMdd", CultureInfo.InvariantCulture);
         }
     }
 }

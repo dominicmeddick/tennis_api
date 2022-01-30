@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 using Repository;
 using Repository.Entities;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Globalization;
 
 namespace APITechTest
 {
+    // Todo: Figure out how to return messages as part of error
+
     [Route("api/players")]
     public class PlayersController : Controller
     {
@@ -44,6 +45,16 @@ namespace APITechTest
                 nationalityId = nationsQuery.First().Id;
             }
 
+            var playerQuery =
+                _context.Players.Where(
+                    p => p.FirstName.Equals(query.FirstName) && p.LastName.Equals(query.LastName)
+                );
+
+            if (playerQuery.Any())
+            {
+                return UnprocessableEntity();
+            }
+
             Player player;
             try
             {
@@ -51,12 +62,13 @@ namespace APITechTest
                     query.FirstName,
                     query.LastName,
                     nationalityId,
-                    query.Birthdate
+                    DateTime.ParseExact(query.Birthdate, "yyyyMMdd", CultureInfo.InvariantCulture),
+                    query.Points ?? 1200,
+                    query.Games ?? 0
                 );
             }
             catch (Exception e)
             {
-                // Todo: error messages
                 return UnprocessableEntity();
             }
 
@@ -74,14 +86,14 @@ namespace APITechTest
             {
                 var nationsQuery = GetNationalities(query.Nationality);
 
-                if (nationsQuery.Count() == 0)
+                if (!nationsQuery.Any())
                 {
                     return NotFound();
                 }
 
                 nationsQuery = nationsQuery.Include(n => n.Players);
 
-                if (nationsQuery.Count() == 0)
+                if (!nationsQuery.Any())
                 {
                     return NotFound();
                 }
