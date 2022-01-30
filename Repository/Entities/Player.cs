@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Repository.Entities
 {
@@ -34,6 +35,17 @@ namespace Repository.Entities
             Id = id;
             Points = points;
             Games = games;
+        }
+
+        public Player
+        (
+            string firstName,
+            string lastName,
+            int nationalityId,
+            string birthDate
+        ): this(firstName, lastName, nationalityId, ParseBirthday(birthDate))
+        {
+
         }
 
         public Player
@@ -91,8 +103,13 @@ namespace Repository.Entities
         // Todo: account for leap years
         public static int CalculcateAge(DateTime birthDate)
         {
-            TimeSpan diff = DateTime.Today - birthDate;
+            var diff = DateTime.Today - birthDate;
             return diff.Days / 365;
+        }
+
+        public static DateTime ParseBirthday(string dateString)
+        {
+            return DateTime.ParseExact(dateString, "yyyyMMdd", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -24,82 +24,103 @@ namespace APITechTest
             _context = context;
         }
 
+        [HttpPost]
+        public IActionResult AddPlayer([FromQuery] RegisterPlayerParameters query)
+        {
+            var nationsQuery = GetNationalities(query.Nationality);
+
+            int nationalityId;
+            if (nationsQuery.Count() == 0)
+            {
+
+                var nationality = new Nationality { Name = query.Nationality };
+                _context.Nationalities.Add(nationality);
+                _context.SaveChanges();
+
+                nationalityId = nationality.Id;
+            }
+            else
+            {
+                nationalityId = nationsQuery.First().Id;
+            }
+
+            Player player;
+            try
+            {
+                player = new Player(
+                    query.FirstName,
+                    query.LastName,
+                    nationalityId,
+                    query.Birthdate
+                );
+            }
+            catch (Exception e)
+            {
+                // Todo: error messages
+                return UnprocessableEntity();
+            }
+
+            _context.Players.Add(player);
+            _context.SaveChanges();
+            return Created("AddPlayer", new PlayerView(player));
+        }
+
         [HttpGet]
         public IActionResult GetPlayers([FromQuery] PlayersQueryParameters query)
         {
-            IQueryable<Player> players = _context.Players;
+            IQueryable<Player> players = null;
 
             if (query.Nationality != null)
             {
-                // Todo: Sanitize input?
-                var name = query.Nationality.ToLower();
-
-                // Todo: More performant to store all nationality names as
-                // lowercase, if there's time to write method to convert
-                // lowercase back to correctly capitalized.
-
-                var nationsQuery =
-                    _context.Nationalities
-                        .Where(n => n.Name.ToLower().Equals(name))
-                        .Include(n => n.Players);
+                var nationsQuery = GetNationalities(query.Nationality);
 
                 if (nationsQuery.Count() == 0)
                 {
                     return NotFound();
                 }
 
-                players = nationsQuery.First().Players.AsQueryable();
+                nationsQuery = nationsQuery.Include(n => n.Players);
+
+                if (nationsQuery.Count() == 0)
+                {
+                    return NotFound();
+                }
+
+                players = nationsQuery
+                            .First()
+                            .Players
+                            .AsQueryable()
+                            .Include(p => p.Nationality);
             }
 
-            //if (query.Rank != null)
-            //{
-            //    // Todo: Sanitize input?
-            //    string name = query.Rank.ToLower();
-            //    IQueryable<Rank> ranksQuery =
-            //        _context.Ranks.Where(n => n.Name.ToLower().Equals(name));
+            if (query.Rank != null)
+            {
+                // Todo: Sanitize input?
 
-            //    if (ranksQuery.Count() == 0)
-            //    {
-            //        return NotFound();
-            //    }
+                if (!Rank.RanksByName.TryGetValue(query.Rank, out Rank rank))
+                {
+                    return NotFound();
+                }
 
-            //    Rank rank = ranksQuery.First();
-            //    players = players.Where(p => p.Points >= rank.MinPoints && p.Points <= rank.MaxPoints);
-            //}
+
+                players = (players ?? _context.Players)
+                            .Where(p => p.Points >= rank.MinPoints && p.Points <= rank.MaxPoints);
+            }
 
             players = players.OrderByDescending(p => p.Points);
-            return Ok(PlayerView.GetViews(players, _context.Nationalities.ToArray()));
+            return Ok(PlayerView.GetViews(players));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetPlayer(int id)
+        private IQueryable<Nationality> GetNationalities(string nameInput)
         {
-            var player = _context.Players.Find(id);
+            // Todo: Sanitize input?
+            var name = nameInput.ToLower();
 
-            if (player != null)
-            {
-                return Ok(player);
-            }
+            // Todo: More performant to store all nationality names as
+            // lowercase, if there's time to write method to convert
+            // lowercase back to correctly capitalized.
 
-            return NotFound();
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return _context.Nationalities.Where(n => n.Name.ToLower().Equals(name));
         }
     }
 }

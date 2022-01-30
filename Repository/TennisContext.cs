@@ -25,12 +25,12 @@ namespace Repository
         // Pre-populate db with nationalities and players
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var serbianNationality = new Nationality(id: 1, name: "Korean");
-            var russianNationality = new Nationality(id: 2, name: "Russia");
-            var germanNationality = new Nationality(id: 3, name: "Germany");
-            var greekNationality = new Nationality(id: 4, name: "Greece");
-            var spanishNationality = new Nationality(id: 5, name: "Spain");
-            var polishNationality = new Nationality(id: 6, name: "Poland");
+            var serbianNationality = new Nationality { Id = 1, Name = "Serbia" };
+            var russianNationality = new Nationality { Id = 2, Name = "Russia" };
+            var germanNationality = new Nationality { Id = 3, Name = "Germany" };
+            var greekNationality = new Nationality { Id = 4, Name = "Greece" };
+            var spanishNationality = new Nationality { Id = 5, Name = "Spain" };
+            var polishNationality = new Nationality { Id = 6, Name = "Poland" };
 
             modelBuilder.Entity<Nationality>(entity =>
             {
@@ -53,7 +53,7 @@ namespace Repository
 
                 entity
                     .HasOne(player => player.Nationality)
-                    .WithMany(x => x.Players);
+                    .WithMany(n => n.Players);
 
                 entity.HasData(
                     new Player
