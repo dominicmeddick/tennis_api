@@ -8,7 +8,6 @@ namespace APITechTest
     {
         private static readonly Rank[] _ranks = new Rank[]
         {
-            new Rank("Unranked", int.MinValue, -1),
             new Rank("Bronze", 0, 2999),
             new Rank("Silver", 3000, 4999),
             new Rank("Gold", 5000, 9999),
@@ -21,12 +20,13 @@ namespace APITechTest
                 { _ranks[0].Name.ToLower(), _ranks[0] },
                 { _ranks[1].Name.ToLower(), _ranks[1] },
                 { _ranks[2].Name.ToLower(), _ranks[2] },
-                { _ranks[3].Name.ToLower(), _ranks[3] },
-                { _ranks[4].Name.ToLower(), _ranks[4] },
+                { _ranks[3].Name.ToLower(), _ranks[3] }
             };
 
         public static readonly ReadOnlyDictionary<string, Rank> RanksByName =
             new ReadOnlyDictionary<string, Rank>(_ranksByName);
+
+        public const string UnrankedName = "Unranked";
 
         public int MinPoints { get; }
         public int MaxPoints { get; }

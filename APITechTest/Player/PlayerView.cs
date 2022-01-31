@@ -12,7 +12,7 @@ namespace APITechTest
         public string LastName { get; }
         public int Age { get; }
         public string Nationality { get; }
-        public string Rank { get; }
+        public string RankName { get; }
         public int Points { get; }
 
         public PlayerView(Player player)
@@ -22,8 +22,9 @@ namespace APITechTest
             LastName = player.LastName;
             Age = Player.CalculcateAge(player.BirthDate);
             Nationality = player.Nationality.Name;
-            Rank = APITechTest.Rank.GetRank(player.Points).Name;
             Points = player.Points;
+
+            RankName = (player.Games < 3) ? Rank.UnrankedName : Rank.GetRank(player.Points).Name;
         }
 
         public static List<PlayerView> GetViews(IEnumerable<Player> players)

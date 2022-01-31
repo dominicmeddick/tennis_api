@@ -35,7 +35,7 @@ namespace Repository.Entities
             Position = position;
         }
 
-        public Player(Player player, Nationality nationality)
+        public Player(Player player, Nationality nationality, int? position = null)
         {
             FirstName = player.FirstName;
             LastName = player.LastName;
@@ -44,7 +44,7 @@ namespace Repository.Entities
             BirthDate = player.BirthDate;
             Points = player.Points;
             Games = player.Games;
-            Position = player.Position;
+            Position = position.HasValue ? position.Value : player.Position;
         }
 
         public Player
