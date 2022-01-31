@@ -11,15 +11,13 @@ namespace APITechTest
         public string FirstName { get; }
         public string LastName { get; }
         public int Age { get; }
-        public string Nationality { get; private set; }
+        public string Nationality { get; }
         public string Rank { get; }
         public int Points { get; }
 
         public PlayerView(Player player)
         {
-            // Todo
-            // Position = position;
-
+            Position = player.Position;
             FirstName = player.FirstName;
             LastName = player.LastName;
             Age = Player.CalculcateAge(player.BirthDate);

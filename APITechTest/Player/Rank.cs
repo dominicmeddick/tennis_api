@@ -18,11 +18,11 @@ namespace APITechTest
         private static readonly Dictionary<string, Rank> _ranksByName =
             new Dictionary<string, Rank>
             {
-                { _ranks[0].Name, _ranks[0] },
-                { _ranks[1].Name, _ranks[1] },
-                { _ranks[2].Name, _ranks[2] },
-                { _ranks[3].Name, _ranks[3] },
-                { _ranks[4].Name, _ranks[4] },
+                { _ranks[0].Name.ToLower(), _ranks[0] },
+                { _ranks[1].Name.ToLower(), _ranks[1] },
+                { _ranks[2].Name.ToLower(), _ranks[2] },
+                { _ranks[3].Name.ToLower(), _ranks[3] },
+                { _ranks[4].Name.ToLower(), _ranks[4] },
             };
 
         public static readonly ReadOnlyDictionary<string, Rank> RanksByName =

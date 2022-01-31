@@ -74,13 +74,22 @@ namespace APITechTest
 
             _context.Players.Add(player);
             _context.SaveChanges();
-            return Created("AddPlayer", new PlayerView(player));
+
+           
+            return Created("AddPlayer", player);
         }
 
         [HttpGet]
         public IActionResult GetPlayers([FromQuery] PlayersQueryParameters query)
         {
-            IQueryable<Player> players = null;
+            // Got to get row index here, before any filtering, for the overall
+            // player ranking position.
+            var players =
+                _context
+                    .Players
+                    .OrderByDescending(p => p.Points)
+                    .ToList()
+                    .Select((p, index) => new Player(p, index + 1));
 
             if (query.Nationality != null)
             {
@@ -91,36 +100,28 @@ namespace APITechTest
                     return NotFound();
                 }
 
-                nationsQuery = nationsQuery.Include(n => n.Players);
-
-                if (!nationsQuery.Any())
-                {
-                    return NotFound();
-                }
-
-                players = nationsQuery
-                            .First()
-                            .Players
-                            .AsQueryable()
-                            .Include(p => p.Nationality);
+                var nationalityId = nationsQuery.First().Id;
+                players = players.Where(p => p.NationalityId == nationalityId);
             }
 
             if (query.Rank != null)
             {
-                // Todo: Sanitize input?
-
-                if (!Rank.RanksByName.TryGetValue(query.Rank, out Rank rank))
+                if (!Rank.RanksByName.TryGetValue(query.Rank.ToLower(), out Rank rank))
                 {
                     return NotFound();
                 }
 
-
-                players = (players ?? _context.Players)
-                            .Where(p => p.Points >= rank.MinPoints && p.Points <= rank.MaxPoints);
+                players = players.Where(p => p.Points >= rank.MinPoints && p.Points <= rank.MaxPoints);
             }
 
-            players = players.OrderByDescending(p => p.Points);
-            return Ok(PlayerView.GetViews(players));
+            // Todo: Figure out how to use player -> nationality relation to
+            // populate Nationality instead. Trying to use
+            // Include(player => player.Nationality) returned null values).
+            var nationalities = _context.Nationalities;
+
+            // Load players into memory so nationalities can be read
+            var playersList = players.ToList().Select(p => new Player(p, nationalities.Find(p.NationalityId)));
+            return Ok(PlayerView.GetViews(playersList));
         }
 
         private IQueryable<Nationality> GetNationalities(string nameInput)
@@ -129,7 +130,7 @@ namespace APITechTest
             var name = nameInput.ToLower();
 
             // Todo: More performant to store all nationality names as
-            // lowercase, if there's time to write method to convert
+            // lowercase? If there's time to write method to convert
             // lowercase back to correctly capitalized.
 
             return _context.Nationalities.Where(n => n.Name.ToLower().Equals(name));

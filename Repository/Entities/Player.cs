@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repository.Entities
 {
@@ -19,6 +20,32 @@ namespace Repository.Entities
         public int Points { get; set; }
 
         public int Games { get; set; }
+
+        [NotMapped]
+        public int Position { get; set; }
+
+        public Player(Player player, int position)
+        {
+            FirstName = player.FirstName;
+            LastName = player.LastName;
+            NationalityId = player.NationalityId;
+            BirthDate = player.BirthDate;
+            Points = player.Points;
+            Games = player.Games;
+            Position = position;
+        }
+
+        public Player(Player player, Nationality nationality)
+        {
+            FirstName = player.FirstName;
+            LastName = player.LastName;
+            NationalityId = player.NationalityId;
+            Nationality = nationality;
+            BirthDate = player.BirthDate;
+            Points = player.Points;
+            Games = player.Games;
+            Position = player.Position;
+        }
 
         public Player
         (
