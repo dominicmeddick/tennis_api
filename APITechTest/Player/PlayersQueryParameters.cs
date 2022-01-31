@@ -1,4 +1,4 @@
-﻿namespace APITechTest
+﻿namespace APITechTest.Players
 {
     public class PlayersQueryParameters
     {

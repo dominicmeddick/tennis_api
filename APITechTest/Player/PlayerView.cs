@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Repository.Entities;
 
-namespace APITechTest
+namespace APITechTest.Players
 {
     public class PlayerView
     {

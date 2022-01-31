@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITechTest
+namespace APITechTest.Players
 {
     public class RegisterPlayerParameters
     {

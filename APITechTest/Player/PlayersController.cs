@@ -11,11 +11,11 @@ using Repository;
 using Repository.Entities;
 using System.Globalization;
 
-namespace APITechTest
+namespace APITechTest.Players
 {
     // Todo: Figure out how to return messages as part of error
 
-    [Route("api/players")]
+    [Route("players")]
     public class PlayersController : Controller
     {
         private readonly TennisContext _context;
@@ -26,7 +26,7 @@ namespace APITechTest
         }
 
         [HttpPost]
-        public IActionResult AddPlayer([FromQuery] RegisterPlayerParameters query)
+        public IActionResult RegisterPlayer([FromQuery] RegisterPlayerParameters query)
         {
             var nationsQuery = GetNationalities(query.Nationality);
 

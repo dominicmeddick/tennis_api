@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace APITechTest
+namespace APITechTest.Players
 {
     public class Rank
     {
