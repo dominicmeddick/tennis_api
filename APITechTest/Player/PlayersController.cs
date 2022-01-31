@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Globalization;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.AspNetCore.Mvc;
 
 using Repository;
 using Repository.Entities;
-using System.Globalization;
 
 namespace APITechTest.Players
 {
-    // Todo: Figure out how to return messages as part of error
-
+    // Controller for players related endpoints.
+    // Todo: Return error messages along with only error codes.
     [Route("players")]
     public class PlayersController : Controller
     {
@@ -25,6 +22,7 @@ namespace APITechTest.Players
             _context = context;
         }
 
+        // Endpoint for registering a new player.
         [HttpPost]
         public IActionResult RegisterPlayer([FromQuery] RegisterPlayerParameters query)
         {
@@ -54,13 +52,13 @@ namespace APITechTest.Players
 
             if (playerQuery.Any())
             {
-                // Todo: return error message about duplicate name
                 return UnprocessableEntity();
             }
 
             Player player;
             try
             {
+                // Player constructor can also throw exceptions for invalid inputs.
                 player = new Player(
                     query.FirstName,
                     query.LastName,
@@ -84,9 +82,11 @@ namespace APITechTest.Players
             // up in _context.Players query(?), so just returning a PlayerView
             // with unknown rank.
             player.Position = -1;
-            return Created("AddPlayer", new PlayerView(player));
+
+            return Created("AddPlayer", new DisplayablePlayer(player));
         }
 
+        // Endpoint for listing all players in the club. 
         [HttpGet]
         public IActionResult GetPlayers([FromQuery] PlayersQueryParameters query)
         {
@@ -95,6 +95,8 @@ namespace APITechTest.Players
 
             var playersContext = _context.Players;
 
+            // If no rank, or the "Unranked" rank was specified, populate the
+            // unrankedPlayers collection.
             if (query.Rank == null || query.Rank.ToLower().Equals(Rank.UnrankedName.ToLower()))
             {
                 unrankedPlayers =
@@ -104,10 +106,12 @@ namespace APITechTest.Players
                         .ToList();
             }
 
+            // If no rank, or a rank other than "Unranked" was specified,
+            // populate the rankedPlayers collection.
             if (query.Rank == null || unrankedPlayers == null)
             {
-                // Got to get row index here, before any filtering, for the overall
-                // player ranking position.
+                // Have to get row index here, before any filtering,
+                // for the overall player ranking position.
                 rankedPlayers =
                     playersContext
                         .Where(p => p.Games >= 3)
@@ -119,7 +123,7 @@ namespace APITechTest.Players
                 {
                     if (!Rank.RanksByName.TryGetValue(query.Rank.ToLower(), out Rank rank))
                     {
-                        return NotFound();
+                        return UnprocessableEntity();
                     }
 
                     rankedPlayers =
@@ -133,7 +137,7 @@ namespace APITechTest.Players
 
                 if (!nationsQuery.Any())
                 {
-                    return NotFound();
+                    return UnprocessableEntity();
                 }
 
                 var nationalityId = nationsQuery.First().Id;
@@ -143,35 +147,36 @@ namespace APITechTest.Players
             }
 
             // Todo: Figure out how to use player -> nationality relation to
-            // populate Nationality instead. Trying to use
-            // Include(player => player.Nationality) returned null values).
+            // populate Nationality instead. Trying to use the method
+            // Include(player => player.Nationality) returned null values.
             var nationalities = _context.Nationalities;
 
-            // Load players into memory so nationalities can be read
-            var playerViews = new List<PlayerView>();
+            
+            var playerViews = new List<DisplayablePlayer>();
             if (rankedPlayers != null)
             {
+                // Load players into memory so nationalities table can be read.
                 var rankedPlayersList =
-                    rankedPlayers?
-                        .ToList()
-                        .Select(
-                            p => new Player(p, nationalities.Find(p.NationalityId))
-                         );
+                        rankedPlayers?
+                            .ToList()
+                            .Select(
+                                p => new Player(p, nationalities.Find(p.NationalityId))
+                            );
 
-                playerViews.AddRange(PlayerView.GetViews(rankedPlayersList));
+                playerViews.AddRange(DisplayablePlayer.Convert(rankedPlayersList));
             }
 
             if (unrankedPlayers != null)
             {
                 var ranking = playersContext.Count();
                 var unrankedPlayersList =
-                    unrankedPlayers?
-                        .ToList()
-                        .Select(
-                            p => new Player(p, nationalities.Find(p.NationalityId), ranking)
-                        );
+                        unrankedPlayers?
+                            .ToList()
+                            .Select(
+                                p => new Player(p, nationalities.Find(p.NationalityId), ranking)
+                            );
 
-                playerViews.AddRange(PlayerView.GetViews(unrankedPlayersList));
+                playerViews.AddRange(DisplayablePlayer.Convert(unrankedPlayersList));
             }
 
             return Ok(playerViews);
@@ -179,13 +184,7 @@ namespace APITechTest.Players
 
         private IQueryable<Nationality> GetNationalities(string nameInput)
         {
-            // Todo: Sanitize input?
             var name = nameInput.ToLower();
-
-            // Todo: More performant to store all nationality names as
-            // lowercase? If there's time to write method to convert
-            // lowercase back to correctly capitalized.
-
             return _context.Nationalities.Where(n => n.Name.ToLower().Equals(name));
         }
     }

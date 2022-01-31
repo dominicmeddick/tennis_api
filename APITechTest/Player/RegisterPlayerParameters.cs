@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace APITechTest.Players
+﻿namespace APITechTest.Players
 {
+    // Parameters for RegisterPlayer endpoint
     public class RegisterPlayerParameters
     {
         // Required

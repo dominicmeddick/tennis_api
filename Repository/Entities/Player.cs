@@ -103,7 +103,7 @@ namespace Repository.Entities
             Games = games;
         }
 
-        // Todo: account for leap years
+        // Todo: Account for leap years
         public static int CalculcateAge(DateTime birthDate)
         {
             var diff = DateTime.Today - birthDate;

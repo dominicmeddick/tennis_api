@@ -8,6 +8,7 @@ using Repository;
 
 namespace APITechTest.Match
 {
+    // Controller for match related endpoints.
     [Route("match")]
     public class MatchController : Controller
     {
@@ -18,6 +19,8 @@ namespace APITechTest.Match
             _context = context;
         }
 
+        // Endpoint for registering a match's winner and loser. Will update
+        // participant players' points and total game values.
         [HttpPost]
         public IActionResult RegisterMatch([FromQuery] RegisterMatchParameters query)
         {

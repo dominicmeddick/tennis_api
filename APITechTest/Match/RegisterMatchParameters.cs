@@ -1,6 +1,6 @@
-﻿using System;
-namespace APITechTest.Match
+﻿namespace APITechTest.Match
 {
+    // Parameters for RegisterMatch endpoint
     public class RegisterMatchParameters
     {
         public string WinnerFirstName { get; set; }

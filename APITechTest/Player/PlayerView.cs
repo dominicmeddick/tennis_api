@@ -5,7 +5,9 @@ using Repository.Entities;
 
 namespace APITechTest.Players
 {
-    public class PlayerView
+    // Converts data from the Player passed into the constructor into a
+    // displayable format.
+    public class DisplayablePlayer
     {
         public string Position { get; }
         public string FirstName { get; }
@@ -15,7 +17,7 @@ namespace APITechTest.Players
         public string RankName { get; }
         public int Points { get; }
 
-        public PlayerView(Player player)
+        public DisplayablePlayer(Player player)
         {
             Position = player.Position < 0 ? "Unknown" : player.Position.ToString();
             FirstName = player.FirstName;
@@ -27,14 +29,14 @@ namespace APITechTest.Players
             RankName = (player.Games < 3) ? Rank.UnrankedName : Rank.GetRank(player.Points).Name;
         }
 
-        public static List<PlayerView> GetViews(IEnumerable<Player> players)
+        // Return a list of all Players as DisposablePlayers, in the same order. 
+        public static List<DisplayablePlayer> Convert(IEnumerable<Player> players)
         {
-            List<PlayerView> views = new List<PlayerView>();
+            var views = new List<DisplayablePlayer>();
 
-            foreach (Player player in players)
+            foreach (var player in players)
             {
-                PlayerView view = new PlayerView(player);
-                views.Add(view);
+                views.Add(new DisplayablePlayer(player));
             }
 
             return views;

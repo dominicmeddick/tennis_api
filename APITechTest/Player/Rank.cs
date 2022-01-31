@@ -6,8 +6,14 @@ namespace APITechTest.Players
 {
     public class Rank
     {
-        private static readonly Rank[] _ranks = new Rank[]
-        {
+        public const string UnrankedName = "Unranked";
+
+        public int MinPoints { get; }
+        public int MaxPoints { get; }
+
+        public string Name { get; }
+
+        private static readonly Rank[] _ranks = new Rank[] {
             new Rank("Bronze", 0, 2999),
             new Rank("Silver", 3000, 4999),
             new Rank("Gold", 5000, 9999),
@@ -15,8 +21,7 @@ namespace APITechTest.Players
         };
 
         private static readonly Dictionary<string, Rank> _ranksByName =
-            new Dictionary<string, Rank>
-            {
+            new Dictionary<string, Rank> {
                 { _ranks[0].Name.ToLower(), _ranks[0] },
                 { _ranks[1].Name.ToLower(), _ranks[1] },
                 { _ranks[2].Name.ToLower(), _ranks[2] },
@@ -25,13 +30,6 @@ namespace APITechTest.Players
 
         public static readonly ReadOnlyDictionary<string, Rank> RanksByName =
             new ReadOnlyDictionary<string, Rank>(_ranksByName);
-
-        public const string UnrankedName = "Unranked";
-
-        public int MinPoints { get; }
-        public int MaxPoints { get; }
-
-        public string Name { get; }
 
         public Rank(string name, int minPoints, int maxPoints)
         {
@@ -50,6 +48,7 @@ namespace APITechTest.Players
             MaxPoints = maxPoints;
         }
 
+        // Returns the rank the points value falls into.
         public static Rank GetRank(int points)
         {
             foreach (Rank rank in _ranks)
