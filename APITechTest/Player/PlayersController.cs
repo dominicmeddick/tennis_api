@@ -89,7 +89,11 @@ namespace APITechTest
 
             if (query.Rank == null || query.Rank.ToLower().Equals(Rank.UnrankedName.ToLower()))
             {
-                unrankedPlayers = playersContext.Where(p => p.Games < 3).ToList();
+                unrankedPlayers =
+                    playersContext
+                        .Where(p => p.Games < 3)
+                        .OrderByDescending(p => p.Points)
+                        .ToList();
             }
 
             if (query.Rank == null || unrankedPlayers == null)
@@ -97,8 +101,7 @@ namespace APITechTest
                 // Got to get row index here, before any filtering, for the overall
                 // player ranking position.
                 rankedPlayers =
-                    _context
-                        .Players
+                    playersContext
                         .Where(p => p.Games >= 3)
                         .OrderByDescending(p => p.Points)
                         .ToList()
