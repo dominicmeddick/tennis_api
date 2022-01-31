@@ -94,11 +94,6 @@ namespace Repository.Entities
             {
                 throw new ArgumentException("Player must be at least 16 years old.");
             }
-            
-            if (IsDuplicateName(firstName, lastName))
-            {
-                throw new ArgumentException("A player with the same first or last name is already registered.");
-            }
 
             FirstName = firstName;
             LastName = lastName;
@@ -106,11 +101,6 @@ namespace Repository.Entities
             BirthDate = birthDate;
             Points = points;
             Games = games;
-        }
-
-        private bool IsDuplicateName(string firstName, string lastName)
-        {
-            return false;
         }
 
         // Todo: account for leap years

@@ -14,6 +14,9 @@ namespace APITechTest.Match
 
             winner.Games += 1;
             loser.Games += 1;
+
+            // Todo: What happens when loser's points are < 10
+            // (so that 10% of that is < 1)
         }
     }
 }

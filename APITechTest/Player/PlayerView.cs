@@ -7,7 +7,7 @@ namespace APITechTest.Players
 {
     public class PlayerView
     {
-        public int Position { get; }
+        public string Position { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public int Age { get; }
@@ -17,7 +17,7 @@ namespace APITechTest.Players
 
         public PlayerView(Player player)
         {
-            Position = player.Position;
+            Position = player.Position < 0 ? "Unknown" : player.Position.ToString();
             FirstName = player.FirstName;
             LastName = player.LastName;
             Age = Player.CalculcateAge(player.BirthDate);

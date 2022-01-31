@@ -18,6 +18,8 @@ namespace Tests
             Assert.That(player.LastName, Is.EqualTo("Meddick"));
             Assert.That(player.NationalityId, Is.EqualTo(nationalityId));
             Assert.That(player.BirthDate, Is.EqualTo(birthday));
+            Assert.That(player.Points, Is.EqualTo(1300));
+            Assert.That(player.Games, Is.EqualTo(4));
         }
 
         [Test]

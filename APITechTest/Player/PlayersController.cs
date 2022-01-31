@@ -33,7 +33,8 @@ namespace APITechTest.Players
             int nationalityId;
             if (nationsQuery.Count() == 0)
             {
-
+                // Create new nationality entry if no nationality of submitted name
+                // already exists.
                 var nationality = new Nationality { Name = query.Nationality };
                 _context.Nationalities.Add(nationality);
                 _context.SaveChanges();
@@ -45,6 +46,7 @@ namespace APITechTest.Players
                 nationalityId = nationsQuery.First().Id;
             }
 
+            // Check if a player with the same first and last name already exists.
             var playerQuery =
                 _context.Players.Where(
                     p => p.FirstName.Equals(query.FirstName) && p.LastName.Equals(query.LastName)
@@ -52,6 +54,7 @@ namespace APITechTest.Players
 
             if (playerQuery.Any())
             {
+                // Todo: return error message about duplicate name
                 return UnprocessableEntity();
             }
 
@@ -75,8 +78,13 @@ namespace APITechTest.Players
             _context.Players.Add(player);
             _context.SaveChanges();
 
-
-            return Created("AddPlayer", player);
+            // Can't return player because of infinite loop because of
+            // nationality relationship(?).
+            // Wanted to calculate actual rank, but new player wouldn't show
+            // up in _context.Players query(?), so just returning a PlayerView
+            // with unknown rank.
+            player.Position = -1;
+            return Created("AddPlayer", new PlayerView(player));
         }
 
         [HttpGet]
