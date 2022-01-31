@@ -17,5 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\APITechTest\APITechTest.csproj" />
   </ItemGroup>
 </Project>

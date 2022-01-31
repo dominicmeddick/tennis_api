@@ -11,7 +11,7 @@ namespace Tests
         {
             int nationalityId = 1;
             DateTime birthday = new DateTime(1994, 12, 4);
-            Player player = new Player("Dominic", "Meddick", nationalityId, birthday);
+            Player player = new Player("Dominic", "Meddick", nationalityId, birthday, 1300, 4);
 
             Assert.NotNull(player);
             Assert.That(player.FirstName, Is.EqualTo("Dominic"));
@@ -28,7 +28,7 @@ namespace Tests
 
             Assert.Throws<ArgumentException>
             (
-                () => new Player(null, "Meddick", nationalityId, birthday)
+                () => new Player(null, "Meddick", nationalityId, birthday, 80, 100)
             );
         }
 
@@ -40,7 +40,7 @@ namespace Tests
 
             Assert.Throws<ArgumentException>
             (
-                () => new Player("Dom", "Meddick", nationalityId, birthday)
+                () => new Player("Dom", "Meddick", nationalityId, birthday, 9000, 10)
             );
         }
     }

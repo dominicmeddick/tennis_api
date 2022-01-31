@@ -104,9 +104,6 @@ namespace Repository.Entities
             LastName = lastName;
             NationalityId = nationalityId;
             BirthDate = birthDate;
-
-            // Default value. Gets overriden if constructor with points param
-            // is used.
             Points = points;
             Games = games;
         }
